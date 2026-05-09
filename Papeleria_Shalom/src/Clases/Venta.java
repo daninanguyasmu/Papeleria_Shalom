@@ -10,4 +10,8 @@ public class Venta {
     ArrayList<Producto> productos;
     double total;
     Pago pago;
+
+    public Venta(int f){
+        this.folio = f;
+    }
 }

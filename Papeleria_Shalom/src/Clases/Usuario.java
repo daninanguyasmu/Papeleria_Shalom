@@ -10,4 +10,3 @@ public class Usuario {
     String usario;
     String contrasenia;
 }
-
