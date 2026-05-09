@@ -28,6 +28,13 @@ public class Producto {
         this.tipo=tipo;
         
     }
+    // Método para checar disponibilidad de artículos
+    public boolean verificarStock() {
+        if (this.tipo.equalsIgnoreCase("servicio")) {
+            return true; // Los servicios no suelen tener límite de stock de la misma forma
+        }
+        return this.stock > 0;
+    }
     // Método para guardar el .txt
 
     /**
@@ -70,5 +77,15 @@ public class Producto {
     public void setTipo(String tipo) { this.tipo = tipo; }
     
 
-    
+    // --- MÉTODO DE PRUEBA TEMPORAL ---
+    public static void main(String[] args) {
+        // 1. Creamos un producto de prueba (como si lo estuviera metiendo el cajero)
+        Producto productoPrueba = new Producto("001", "Coca Cola 600ml", 12.50, 18.00, 24, "articulo");
+        
+        // 2. Probamos si nos dice correctamente si hay stock
+        System.out.println("¿Hay stock disponible? " + productoPrueba.verificarStock());
+        
+        // 3. Probamos el guardado en el archivo de texto
+        productoPrueba.guardarEnTxt();
+    }
 }
