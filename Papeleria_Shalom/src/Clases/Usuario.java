@@ -1,12 +1,21 @@
 package Clases;
 
-import java.time.LocalDate;
-
 public class Usuario {
-    int tipo; //1: Administrador, 2: Vendedor
-    int id;
+
+    String contrasena;
     String nombre;
-    LocalDate fechaNacimiento;
-    String usario;
-    String contrasenia;
+    String usuario;
+    String Contrasena;
+    int tipo; //aqui es 1 Admin y 2 Cajero
+
+
+    public Usuario (String nombre, String usuario, String contrasena, int tipo){
+        this.nombre = nombre;
+        this.usuario = usuario;
+        this.contrasena = contrasena;
+        this.tipo = tipo;
+    }
+
+    public Usuario() {
+    }
 }
