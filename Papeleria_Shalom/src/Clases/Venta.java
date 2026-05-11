@@ -11,7 +11,8 @@ public class Venta {
     double total;
     Pago pago;
 
-    public Venta(int f){
+    public Venta(int f, int id){
         this.folio = f;
+        this.idVendedor=id;
     }
 }
