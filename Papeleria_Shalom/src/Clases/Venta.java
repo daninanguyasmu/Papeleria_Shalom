@@ -22,7 +22,7 @@ public class Venta {
         this.folio = this.getContadorVentas() + 1;
         this.nombreVendedor = nv;
         this.fecha = LocalDateTime.now();
-        this.total = 500;
+        this.total = 0;
     }
 
     public void menuVenta() {
@@ -48,7 +48,7 @@ public class Venta {
                     JOptionPane.showMessageDialog(null, buscarProducto(cod));
                     break;
                 case 4:
-
+                    guardarVenta();
             }
         } while (opcion != 5);
 
@@ -83,6 +83,7 @@ public class Venta {
                 if (codigoBuscar.equals(codigoProd[0])) {
                     fndProd = true;
                     index = i;
+                    break;
                 } else {
                     fndProd = false;
                 }
@@ -97,6 +98,12 @@ public class Venta {
 
 
     public void guardarVenta() {
+        this.total = 0;
+        for(int i = 0; i < productos.size(); i++){
+            String prod = productos.get(i);
+            String[] spltProd = prod.split("\\|");
+            this.total += Double.parseDouble(spltProd[4]);
+        }
         try (FileWriter fw = new FileWriter("src/Archivos/ventas.txt", true);
              PrintWriter pw = new PrintWriter(fw)) {
             pw.println(this.folio + "," + this.fecha + "," + this.nombreVendedor + "," + this.productos + "," + this.total);
@@ -104,6 +111,7 @@ public class Venta {
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error en guardar la venta'" + e);
         }
+        setContadorVentas();
     }
 
     private int getContadorVentas() {
@@ -183,6 +191,5 @@ public class Venta {
             txt.append("---------------------------------\n").append(linea).append("\n");
         }
         JOptionPane.showMessageDialog(null, txt, "PRODUCTOS", JOptionPane.INFORMATION_MESSAGE);
-
     }
 }
