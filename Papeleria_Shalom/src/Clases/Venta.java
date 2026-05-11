@@ -18,14 +18,14 @@ public class Venta {
     String rutaProductos = "src/Archivos/inventario.txt";
 
 
-    public Venta(String nv){
-            this.folio = this.getContadorVentas() + 1;
-            this.nombreVendedor = nv;
-            this.fecha = LocalDateTime.now();
-            this.total = 500;
+    public Venta(String nv) {
+        this.folio = this.getContadorVentas() + 1;
+        this.nombreVendedor = nv;
+        this.fecha = LocalDateTime.now();
+        this.total = 500;
     }
 
-    public void menuVenta (){
+    public void menuVenta() {
         String menu = """
                 1. Agregar Producto
                 2. Eliminar Producto
@@ -36,7 +36,7 @@ public class Venta {
 
         do {
             opcion = Integer.parseInt(JOptionPane.showInputDialog(null, menu));
-            switch (opcion){
+            switch (opcion) {
                 case 1:
                     agregarProducto();
                     break;
@@ -50,27 +50,27 @@ public class Venta {
                 case 4:
 
             }
-        }while(opcion != 5);
+        } while (opcion != 5);
 
     }
 
-    public void agregarProducto(){
+    public void agregarProducto() {
         String codigo = JOptionPane.showInputDialog(null, "Ingrese el código del producto que desea agregar");
         int cantidad = Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese la cantidad del producto"));
         String fndProd = buscarProducto(codigo, cantidad);
 
-        if (fndProd.isEmpty()){
+        if (fndProd.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Producto no encontrado o cantidad insuficiente", "Error", JOptionPane.WARNING_MESSAGE);
-        }else{
+        } else {
             productos.add(fndProd);
         }
         mostrarVenta();
     }
 
     public void eliminarProducto() {
-        if (productos.isEmpty()){
-            JOptionPane.showMessageDialog(null, "No hay productos para eliminar.","Eliminar producto", JOptionPane.WARNING_MESSAGE);
-        }else{
+        if (productos.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No hay productos para eliminar.", "Eliminar producto", JOptionPane.WARNING_MESSAGE);
+        } else {
             mostrarVenta();
             boolean fndProd = false;
             int index = 0;
@@ -87,27 +87,26 @@ public class Venta {
                     fndProd = false;
                 }
             }
-            if (fndProd){
+            if (fndProd) {
                 productos.remove(index);
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(null, "Producto con el código: " + codigoBuscar + " no encontrado");
             }
         }
     }
 
 
-
-    public void guardarVenta(){
-        try(FileWriter fw = new FileWriter("src/Archivos/ventas.txt", true);
-        PrintWriter pw = new PrintWriter(fw)){
+    public void guardarVenta() {
+        try (FileWriter fw = new FileWriter("src/Archivos/ventas.txt", true);
+             PrintWriter pw = new PrintWriter(fw)) {
             pw.println(this.folio + "," + this.fecha + "," + this.nombreVendedor + "," + this.productos + "," + this.total);
             JOptionPane.showMessageDialog(null, "Venta '" + this.folio + "' registrada correctamente.");
-        }catch(IOException e){
+        } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error en guardar la venta'" + e);
         }
     }
 
-    private int getContadorVentas(){
+    private int getContadorVentas() {
         try {
 
             FileReader fr = new FileReader(rutaContandorVentas);
@@ -116,67 +115,67 @@ public class Venta {
             String cont = br.readLine();
             return Integer.parseInt(cont);
 
-        }catch(Exception e){
+        } catch (Exception e) {
             IO.print(e);
         }
         return 0;
     }
 
-    private void setContadorVentas(){
-        try(PrintWriter pw = new PrintWriter(rutaContandorVentas)) {
+    private void setContadorVentas() {
+        try (PrintWriter pw = new PrintWriter(rutaContandorVentas)) {
             pw.print(folio);
-        }catch (IOException e){
+        } catch (IOException e) {
             IO.println("Error:" + e);
         }
     }
 
-    private String buscarProducto(String id, int cant){
-        try{
+    private String buscarProducto(String id, int cant) {
+        try {
             FileReader fr = new FileReader(rutaProductos);
             BufferedReader br = new BufferedReader(fr);
 
             String pr;
 
-            while((pr = br.readLine()) != null){
+            while ((pr = br.readLine()) != null) {
                 String[] prod = pr.split(",");
-                if (prod[0].equals(id)){
-                    if (Integer.parseInt(prod[4]) > 0 && Integer.parseInt(prod[4]) >= cant){
+                if (prod[0].equals(id)) {
+                    if (Integer.parseInt(prod[4]) > 0 && Integer.parseInt(prod[4]) >= cant) {
                         String fndProducto = pr;
-                        return prod[0] + "|" + prod[1] + "|" + prod[3] + "|" + cant + "|" + cant*Double.parseDouble(prod[3]);
+                        return prod[0] + "|" + prod[1] + "|" + prod[3] + "|" + cant + "|" + cant * Double.parseDouble(prod[3]);
                     }
                 }
             }
             return "";
-        }catch(IOException e){
+        } catch (IOException e) {
             IO.println(e);
             return "";
         }
     }
 
-    private String buscarProducto(String id){
-        try{
+    private String buscarProducto(String id) {
+        try {
             FileReader fr = new FileReader(rutaProductos);
             BufferedReader br = new BufferedReader(fr);
 
             String pr;
 
-            while((pr = br.readLine()) != null){
+            while ((pr = br.readLine()) != null) {
                 String[] prod = pr.split(",");
-                if (prod[0].equals(id)){
-                        String fndProducto = pr;
-                        return prod[0] + "|" + prod[1] + "|" + prod[3] + "|" + prod[4] + "|";
+                if (prod[0].equals(id)) {
+                    String fndProducto = pr;
+                    return prod[0] + "|" + prod[1] + "|" + prod[3] + "|" + prod[4] + "|";
                 }
             }
             return "";
-        }catch(IOException e){
+        } catch (IOException e) {
             IO.println(e);
             return "";
         }
     }
 
-    private void mostrarVenta(){
+    private void mostrarVenta() {
         StringBuilder txt = new StringBuilder();
-        for(int i = 0; i < productos.size();i++){
+        for (int i = 0; i < productos.size(); i++) {
             IO.println(i);
             String linea = productos.get(i);
             String[] spltProd = linea.split("\\|");
@@ -184,5 +183,6 @@ public class Venta {
             txt.append("---------------------------------\n").append(linea).append("\n");
         }
         JOptionPane.showMessageDialog(null, txt, "PRODUCTOS", JOptionPane.INFORMATION_MESSAGE);
+
     }
 }

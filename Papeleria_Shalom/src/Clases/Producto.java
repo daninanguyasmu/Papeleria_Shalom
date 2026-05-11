@@ -28,7 +28,14 @@ public class Producto {
         this.tipo=tipo;
         
     }
-    // Método para guardar el .txt
+    // Método para checar disponibilidad de artículos a la vrg 
+    public boolean verificarStock() {
+        if (this.tipo.equalsIgnoreCase("servicio")) {
+            return true; 
+        }
+        return this.stock > 0;
+    }
+    // Método para guardar el .txt xdddd
 
     /**
      *
@@ -51,7 +58,8 @@ public class Producto {
     }
 
     // --- GETTERS Y SETTERS ---
-    public String getCodigo() { return codigo; }
+    public String getCodigo() 
+    { return codigo; }
     public void setCodigo(String codigo) { this.codigo = codigo; }
 
     public String getNombre() { return nombre; }
@@ -70,5 +78,13 @@ public class Producto {
     public void setTipo(String tipo) { this.tipo = tipo; }
     
 
-    
+    // --- minimain ---
+    public static void main(String[] args) {
+       
+        private String agre;
+        
+        
+        
+        
+    }
 }
