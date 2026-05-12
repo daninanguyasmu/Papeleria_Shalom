@@ -64,6 +64,7 @@ public class Venta {
         } else {
             productos.add(fndProd);
         }
+        Inventario.actualizarStock(codigo, cantidad, true);
         mostrarVenta();
     }
 
@@ -74,6 +75,7 @@ public class Venta {
             mostrarVenta();
             boolean fndProd = false;
             int index = 0;
+            int cantProd = 0;
             String codigoBuscar = JOptionPane.showInputDialog(null, "Ingrese el código del producto que desee eliminar");
             for (int i = 0; i < productos.size(); i++) {
                 String prod = productos.get(i);
@@ -83,6 +85,7 @@ public class Venta {
                 if (codigoBuscar.equals(codigoProd[0])) {
                     fndProd = true;
                     index = i;
+                    cantProd = Integer.parseInt(codigoProd[3]);
                     break;
                 } else {
                     fndProd = false;
@@ -90,6 +93,7 @@ public class Venta {
             }
             if (fndProd) {
                 productos.remove(index);
+                Inventario.actualizarStock(codigoBuscar, cantProd, false);
             } else {
                 JOptionPane.showMessageDialog(null, "Producto con el código: " + codigoBuscar + " no encontrado");
             }
@@ -138,9 +142,8 @@ public class Venta {
     }
 
     private String buscarProducto(String id, int cant) {
-        try {
-            FileReader fr = new FileReader(rutaProductos);
-            BufferedReader br = new BufferedReader(fr);
+        try (FileReader fr = new FileReader(rutaProductos);
+             BufferedReader br = new BufferedReader(fr);){
 
             String pr;
 
@@ -161,9 +164,8 @@ public class Venta {
     }
 
     private String buscarProducto(String id) {
-        try {
-            FileReader fr = new FileReader(rutaProductos);
-            BufferedReader br = new BufferedReader(fr);
+        try(FileReader fr = new FileReader(rutaProductos);
+             BufferedReader br = new BufferedReader(fr)){
 
             String pr;
 
