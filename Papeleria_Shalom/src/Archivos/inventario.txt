@@ -1,0 +1,3 @@
+AR001,Pegamento,8,15,60,a
+AR002,Tijera,15,22,50,a
+AR003,Cuaderno,18,26,30,a
