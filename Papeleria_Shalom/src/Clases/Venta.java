@@ -48,7 +48,14 @@ public class Venta {
                     JOptionPane.showMessageDialog(null, buscarProducto(cod));
                     break;
                 case 4:
-                    guardarVenta();
+                    if (productos.isEmpty()){
+                        JOptionPane.showMessageDialog(null, "¡Agregue productos a la venta!");
+                        break;
+                    }else{
+                        guardarVenta();
+                        break;
+                    }
+
             }
         } while (opcion != 5);
 
@@ -63,9 +70,9 @@ public class Venta {
             JOptionPane.showMessageDialog(null, "Producto no encontrado o cantidad insuficiente", "Error", JOptionPane.WARNING_MESSAGE);
         } else {
             productos.add(fndProd);
+            Inventario.actualizarStock(codigo, cantidad, true);
         }
-        Inventario.actualizarStock(codigo, cantidad, true);
-        mostrarVenta();
+        mostrarProductos();
     }
 
     public void eliminarProducto() {
@@ -87,8 +94,6 @@ public class Venta {
                     index = i;
                     cantProd = Integer.parseInt(codigoProd[3]);
                     break;
-                } else {
-                    fndProd = false;
                 }
             }
             if (fndProd) {
@@ -102,25 +107,19 @@ public class Venta {
 
 
     public void guardarVenta() {
-
         this.total = 0;
         String productosTexto = "";
         for (int i = 0; i < productos.size(); i++) {
             String prod = productos.get(i);
             String[] spltProd = prod.split("\\|");
-            productosTexto +=
-                    spltProd[1] +
-                            " x" +
-                            spltProd[3];
+            productosTexto += spltProd[1] + " x" + spltProd[3];
             if (i < productos.size() - 1) {
                 productosTexto += " - ";
             }
             this.total += Double.parseDouble(spltProd[4]);
-
         }
 
-        try (FileWriter fw =
-                     new FileWriter("src/Archivos/ventas.txt", true);
+        try (FileWriter fw = new FileWriter("src/Archivos/ventas.txt", true);
              PrintWriter pw = new PrintWriter(fw)) {
             pw.println(
                             this.folio + "," +
@@ -136,11 +135,10 @@ public class Venta {
 
         } catch (IOException e) {
 
-            JOptionPane.showMessageDialog(null,
-                    "Error al guardar la venta: " + e);
+            JOptionPane.showMessageDialog(null, "Error al guardar la venta: " + e);
         }
         setContadorVentas();
-
+        productos.clear();
     }
 
     private int getContadorVentas() {
@@ -168,7 +166,7 @@ public class Venta {
 
     private String buscarProducto(String id, int cant) {
         try (FileReader fr = new FileReader(rutaProductos);
-             BufferedReader br = new BufferedReader(fr);) {
+             BufferedReader br = new BufferedReader(fr);){
 
             String pr;
 
@@ -189,8 +187,8 @@ public class Venta {
     }
 
     private String buscarProducto(String id) {
-        try (FileReader fr = new FileReader(rutaProductos);
-             BufferedReader br = new BufferedReader(fr)) {
+        try(FileReader fr = new FileReader(rutaProductos);
+             BufferedReader br = new BufferedReader(fr)){
 
             String pr;
 
@@ -208,16 +206,18 @@ public class Venta {
         }
     }
 
-    private void mostrarVenta() {
+    private void mostrarProductos() {
         StringBuilder txt = new StringBuilder();
-        for (int i = 0; i < productos.size(); i++) {
-            IO.println(i);
-            String linea = productos.get(i);
-            String[] spltProd = linea.split("\\|");
-            linea = "Código: " + spltProd[0] + " Nombre: " + spltProd[1] + " Precio: $" + spltProd[2] + " Cantidad: " + spltProd[3] + " Total Unitario: $" + spltProd[4];
-            txt.append("---------------------------------\n").append(linea).append("\n");
+        if(!productos.isEmpty()){
+            for (int i = 0; i < productos.size(); i++) {
+                IO.println(i);
+                String linea = productos.get(i);
+                String[] spltProd = linea.split("\\|");
+                linea = "Código: " + spltProd[0] + " Nombre: " + spltProd[1] + " Precio: $" + spltProd[2] + " Cantidad: " + spltProd[3] + " Total Unitario: $" + spltProd[4];
+                txt.append("---------------------------------\n").append(linea).append("\n");
+            }
+            JOptionPane.showMessageDialog(null, txt, "PRODUCTOS", JOptionPane.INFORMATION_MESSAGE);
         }
-        JOptionPane.showMessageDialog(null, txt, "PRODUCTOS", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public static void mostrarHistorialVentas() {
@@ -233,26 +233,11 @@ public class Venta {
                     contenido.append(
                             "══════════════════════\n"
                     );
-                    contenido.append(
-                            "Folio: "
-                                    + datos[0] + "\n"
-                    );
-                    contenido.append(
-                            "Fecha: "
-                                    + datos[1] + "\n"
-                    );
-                    contenido.append(
-                            "Vendedor: "
-                                    + datos[2] + "\n"
-                    );
-                    contenido.append(
-                            "Productos: "
-                                    + datos[3] + "\n"
-                    );
-                    contenido.append(
-                            "Total: $"
-                                    + datos[4] + "\n\n"
-                    );
+                    contenido.append("Folio: ").append(datos[0]).append("\n");
+                    contenido.append("Fecha: ").append(datos[1]).append("\n");
+                    contenido.append("Vendedor: ").append(datos[2]).append("\n");
+                    contenido.append("Productos: ").append(datos[3]).append("\n");
+                    contenido.append("Total: $").append(datos[4]).append("\n\n");
 
                 }
 
@@ -260,7 +245,7 @@ public class Venta {
 
             lector.close();
 
-            if (contenido.length() == 0) {
+            if (contenido.isEmpty()) {
 
                 contenido.append(
                         "No hay ventas registradas."
@@ -285,5 +270,14 @@ public class Venta {
 
         }
 
+    }
+
+    private void mostrarVenta(){
+        String txt = String.format("""
+                Folio: %d
+                N° Productos: %d
+                Total: %f
+                """, this.folio, productos.size(), this.total);
+        JOptionPane.showMessageDialog(null,txt);
     }
 }
