@@ -6,20 +6,166 @@ public class Administrador extends Usuario {
 
     public Administrador (String nombre, String usuario, String contrasena){
 
-        super (nombre, usuario, contrasena, 1); // mando directo el tipo 1, porque ya sabemos que es admin
+        super (nombre, usuario, contrasena, 1);
 
     }
 
-    public void Menu(){
+    public void Menu() {
 
-        JOptionPane.showMessageDialog(null,
-                "------- Opciones Para Administrador ------- \n" +
-                        "1. Finanzas\n" +
-                        "2. Inventario\n" +
-                        "3. Nueva Venta");
+        int opcion;
+
+        do {
+
+            opcion = Integer.parseInt(
+                    JOptionPane.showInputDialog(
+                            """
+                            ╔════════ ADMINISTRADOR ════════╗
+                            
+                            1. Finanzas
+                            2. Inventario
+                            3. Nueva Venta
+                            4. Cerrar Sesión
+                            
+                            Seleccione una opción:
+                            """
+                    )
+            );
+
+            switch (opcion) {
+
+                case 1:
+
+                    finanzas();
+
+                    break;
+
+                case 2:
+
+                    inventario();
+
+                    break;
+
+                case 3:
+
+                    Venta venta = new Venta(getNombre());
+
+                    venta.menuVenta();
+
+                    break;
+
+                case 4:
+
+                    JOptionPane.showMessageDialog(null,
+                            "Cerrando sesión...");
+
+                    break;
+
+                default:
+
+                    JOptionPane.showMessageDialog(null,
+                            "Opción inválida.");
+
+            }
+
+        } while (opcion != 4);
 
     }
 
+
+    public void inventario() {
+
+        int opcion;
+
+        do {
+
+            opcion = Integer.parseInt(
+                    JOptionPane.showInputDialog(
+                            """
+                            ╔════════ INVENTARIO ════════╗
+                            
+                            1. Registrar Producto
+                            2. Ver productos
+                            3. Volver
+                            
+                            Seleccione una opción:
+                            """
+                    )
+            );
+
+            switch (opcion) {
+
+                case 1:
+
+                    Producto.registrarProducto();
+
+                    break;
+
+                case 2:
+
+                    Producto.mostrarProductos();
+
+                    break;
+
+                case 3:
+
+                    JOptionPane.showMessageDialog(null,
+                            "Regresando...");
+
+                    break;
+
+                default:
+
+                    JOptionPane.showMessageDialog(null,
+                            "Opción inválida.");
+
+            }
+
+        } while (opcion != 3);
+
+    }
+
+    public void finanzas() {
+
+        int opcion;
+
+        do {
+
+            opcion = Integer.parseInt(
+                    JOptionPane.showInputDialog(
+                            """
+                            ╔════════ FINANZAS ════════╗
+                            
+                            1. Ver Historial de Ventas
+                            2. Volver
+                            
+                            Seleccione una opción:
+                            """
+                    )
+            );
+
+            switch (opcion) {
+
+                case 1:
+
+                    Venta.mostrarHistorialVentas();
+
+                    break;
+
+                case 2:
+
+                    JOptionPane.showMessageDialog(null,
+                            "Regresando...");
+
+                    break;
+
+                default:
+
+                    JOptionPane.showMessageDialog(null,
+                            "Opción inválida.");
+
+            }
+
+        } while (opcion != 2);
+    }
 }
-
 

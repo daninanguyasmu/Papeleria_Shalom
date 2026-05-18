@@ -102,20 +102,45 @@ public class Venta {
 
 
     public void guardarVenta() {
+
         this.total = 0;
-        for(int i = 0; i < productos.size(); i++){
+        String productosTexto = "";
+        for (int i = 0; i < productos.size(); i++) {
             String prod = productos.get(i);
             String[] spltProd = prod.split("\\|");
+            productosTexto +=
+                    spltProd[1] +
+                            " x" +
+                            spltProd[3];
+            if (i < productos.size() - 1) {
+                productosTexto += " - ";
+            }
             this.total += Double.parseDouble(spltProd[4]);
+
         }
-        try (FileWriter fw = new FileWriter("src/Archivos/ventas.txt", true);
+
+        try (FileWriter fw =
+                     new FileWriter("src/Archivos/ventas.txt", true);
              PrintWriter pw = new PrintWriter(fw)) {
-            pw.println(this.folio + "," + this.fecha + "," + this.nombreVendedor + "," + this.productos + "," + this.total);
-            JOptionPane.showMessageDialog(null, "Venta '" + this.folio + "' registrada correctamente.");
+            pw.println(
+                            this.folio + "," +
+                            this.fecha + "," +
+                            this.nombreVendedor + "," +
+                            productosTexto + "," +
+                            this.total
+            );
+
+            JOptionPane.showMessageDialog(null,
+                    "Venta '" + this.folio +
+                            "' registrada correctamente.");
+
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error en guardar la venta'" + e);
+
+            JOptionPane.showMessageDialog(null,
+                    "Error al guardar la venta: " + e);
         }
         setContadorVentas();
+
     }
 
     private int getContadorVentas() {
@@ -143,7 +168,7 @@ public class Venta {
 
     private String buscarProducto(String id, int cant) {
         try (FileReader fr = new FileReader(rutaProductos);
-             BufferedReader br = new BufferedReader(fr);){
+             BufferedReader br = new BufferedReader(fr);) {
 
             String pr;
 
@@ -164,8 +189,8 @@ public class Venta {
     }
 
     private String buscarProducto(String id) {
-        try(FileReader fr = new FileReader(rutaProductos);
-             BufferedReader br = new BufferedReader(fr)){
+        try (FileReader fr = new FileReader(rutaProductos);
+             BufferedReader br = new BufferedReader(fr)) {
 
             String pr;
 
@@ -193,5 +218,72 @@ public class Venta {
             txt.append("---------------------------------\n").append(linea).append("\n");
         }
         JOptionPane.showMessageDialog(null, txt, "PRODUCTOS", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public static void mostrarHistorialVentas() {
+
+        try {
+
+            BufferedReader lector = new BufferedReader(new FileReader("src/Archivos/ventas.txt"));
+            String linea;
+            StringBuilder contenido = new StringBuilder();
+            while ((linea = lector.readLine()) != null) {
+                String[] datos = linea.split(",");
+                if (datos.length >= 5) {
+                    contenido.append(
+                            "══════════════════════\n"
+                    );
+                    contenido.append(
+                            "Folio: "
+                                    + datos[0] + "\n"
+                    );
+                    contenido.append(
+                            "Fecha: "
+                                    + datos[1] + "\n"
+                    );
+                    contenido.append(
+                            "Vendedor: "
+                                    + datos[2] + "\n"
+                    );
+                    contenido.append(
+                            "Productos: "
+                                    + datos[3] + "\n"
+                    );
+                    contenido.append(
+                            "Total: $"
+                                    + datos[4] + "\n\n"
+                    );
+
+                }
+
+            }
+
+            lector.close();
+
+            if (contenido.length() == 0) {
+
+                contenido.append(
+                        "No hay ventas registradas."
+                );
+
+            }
+
+            JOptionPane.showMessageDialog(
+                    null,
+                    contenido.toString(),
+                    "HISTORIAL DE VENTAS",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+
+        } catch (IOException e) {
+
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Error al leer historial: "
+                            + e.getMessage()
+            );
+
+        }
+
     }
 }

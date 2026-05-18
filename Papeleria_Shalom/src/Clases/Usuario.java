@@ -2,14 +2,14 @@ package Clases;
 
 public class Usuario {
 
-    String contrasena;
-    String nombre;
-    String usuario;
-    String Contrasena;
-    int tipo; //aqui es 1 Admin y 2 Cajero
+    private String contrasena;
+    private String nombre;
+    private String usuario;
+    private int tipo;
 
 
-    public Usuario (String nombre, String usuario, String contrasena, int tipo){
+    public Usuario(String nombre, String usuario, String contrasena, int tipo) {
+
         this.nombre = nombre;
         this.usuario = usuario;
         this.contrasena = contrasena;
