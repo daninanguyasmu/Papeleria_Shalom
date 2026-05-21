@@ -10,7 +10,7 @@ public class Administrador extends Usuario {
 
     }
 
-    public void Menu() {
+    public void menu() {
 
         int opcion;
 
@@ -135,8 +135,9 @@ public class Administrador extends Usuario {
                             """
                             ╔════════ FINANZAS ════════╗
                             
-                            1. Ver Historial de Ventas
-                            2. Volver
+                            1. Reporte Financiero
+                            2. Ver Historial de Ventas
+                            3. Volver
                             
                             Seleccione una opción:
                             """
@@ -147,11 +148,17 @@ public class Administrador extends Usuario {
 
                 case 1:
 
-                    Venta.mostrarHistorialVentas();
+                    Venta.reporteFinanciero();
 
                     break;
 
                 case 2:
+
+                    Venta.mostrarHistorialVentas();
+
+                    break;
+
+                case 3:
 
                     JOptionPane.showMessageDialog(null,
                             "Regresando...");
@@ -165,7 +172,7 @@ public class Administrador extends Usuario {
 
             }
 
-        } while (opcion != 2);
+        } while (opcion != 3);
     }
 }
 

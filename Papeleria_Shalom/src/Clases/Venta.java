@@ -280,4 +280,72 @@ public class Venta {
                 """, this.folio, productos.size(), this.total);
         JOptionPane.showMessageDialog(null,txt);
     }
+
+    public static void reporteFinanciero() {
+
+        double totalVendido = 0;
+        int cantidadVentas = 0;
+        double ventaMayor = 0;
+        double ventaMenor = Double.MAX_VALUE;
+
+        try {
+
+            BufferedReader lector = new BufferedReader(
+                    new FileReader("src/Archivos/ventas.txt")
+            );
+
+            String linea;
+
+            while ((linea = lector.readLine()) != null) {
+
+                String[] datos = linea.split(",");
+
+                if (datos.length >= 5) {
+                    double totalVenta = Double.parseDouble(datos[4]);
+                    totalVendido += totalVenta;
+                    cantidadVentas++;
+                    if (totalVenta > ventaMayor) {
+                        ventaMayor = totalVenta;
+                    }
+
+                    if (totalVenta < ventaMenor) {
+                        ventaMenor = totalVenta;
+
+                    }
+
+                }
+
+            }
+
+            lector.close();
+            double promedio = 0;
+            if (cantidadVentas > 0) {
+                promedio = totalVendido / cantidadVentas;
+            } else {
+                ventaMenor = 0;
+            }
+
+            JOptionPane.showMessageDialog(
+                    null,
+                    """
+                    ╔══════ REPORTE FINANCIERO ══════╗
+                    
+                    Ventas realizadas: """ + cantidadVentas +
+                            "\nTotal vendido: $" + totalVendido +
+                            "\nPromedio por venta: $" + promedio +
+                            "\nVenta mayor: $" + ventaMayor +
+                            "\nVenta menor: $" + ventaMenor,
+                    "FINANZAS",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Error al generar reporte: "
+                            + e.getMessage()
+            );
+
+        }
+
+    }
 }

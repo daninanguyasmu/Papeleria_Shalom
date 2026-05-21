@@ -74,41 +74,59 @@ public class Producto {
 
     public static void registrarProducto() {
 
-        String codigo = JOptionPane.showInputDialog(
-                "Ingrese código:");
+        try {
 
-        String nombre = JOptionPane.showInputDialog(
-                "Ingrese nombre:");
+            String codigo = JOptionPane.showInputDialog(
+                    "Ingrese código:");
 
-        double precioCompra = Double.parseDouble(
-                JOptionPane.showInputDialog(
-                        "Ingrese precio de compra:")
-        );
+            if (codigo == null || codigo.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(null,
+                        "Código inválido.");
+                return;
+            }
+            if(existeProducto(codigo)){
+                JOptionPane.showMessageDialog(null,
+                        "El código del producto ya existe.");
+                return;
+            }
 
-        double precioVenta = Double.parseDouble(
-                JOptionPane.showInputDialog(
-                        "Ingrese precio de venta:")
-        );
+            String nombre = JOptionPane.showInputDialog(
+                    "Ingrese nombre:");
 
-        int stock = Integer.parseInt(
-                JOptionPane.showInputDialog(
-                        "Ingrese stock:")
-        );
+            if (nombre == null || nombre.trim().isEmpty()) {JOptionPane.showMessageDialog(null, "Nombre inválido.");
+                return;
+            }
+            double precioCompra = Double.parseDouble(JOptionPane.showInputDialog("Ingrese precio de compra:"));
 
-        String tipo = JOptionPane.showInputDialog(
-                "Ingrese tipo (articulo/servicio):");
+            double precioVenta = Double.parseDouble(JOptionPane.showInputDialog("Ingrese precio de venta:"));
 
-        Producto producto = new Producto(
-                codigo,
-                nombre,
-                precioCompra,
-                precioVenta,
-                stock,
-                tipo
-        );
+            int stock = Integer.parseInt(JOptionPane.showInputDialog("Ingrese stock:"));
 
-        producto.guardarEnTxt();
+            if(precioCompra < 0 || precioVenta < 0 || stock < 0){
 
+                JOptionPane.showMessageDialog(null,
+                        "No se permiten valores negativos.");
+                return;
+            }
+
+            String tipo = JOptionPane.showInputDialog(
+                    "Ingrese tipo (articulo/servicio):");
+            if (tipo == null || tipo.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(null,
+                        "Tipo inválido.");
+                return;
+            }
+            Producto producto = new Producto(codigo, nombre, precioCompra, precioVenta, stock, tipo);
+            producto.guardarEnTxt();
+
+        } catch (NumberFormatException e) {
+
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Ingrese valores numéricos válidos."
+            );
+
+        }
     }
 
 
@@ -125,37 +143,12 @@ public class Producto {
                     contenido.append(
                             "══════════════════════\n"
                     );
-
-                    contenido.append(
-                            "Código: "
-                                    + datos[0] + "\n"
-                    );
-
-                    contenido.append(
-                            "Nombre: "
-                                    + datos[1] + "\n"
-                    );
-
-                    contenido.append(
-                            "Precio Compra: $"
-                                    + datos[2] + "\n"
-                    );
-
-                    contenido.append(
-                            "Precio Venta: $"
-                                    + datos[3] + "\n"
-                    );
-
-                    contenido.append(
-                            "Stock: "
-                                    + datos[4] + "\n"
-                    );
-
-                    contenido.append(
-                            "Tipo: "
-                                    + datos[5] + "\n\n"
-                    );
-
+                    contenido.append("Código: " + datos[0] + "\n");
+                    contenido.append("Nombre: " + datos[1] + "\n");
+                    contenido.append("Precio Compra: $" + datos[2] + "\n");
+                    contenido.append("Precio Venta: $" + datos[3] + "\n");
+                    contenido.append("Stock: " + datos[4] + "\n");
+                    contenido.append("Tipo: " + datos[5] + "\n\n");
                 }
 
             }
@@ -163,7 +156,6 @@ public class Producto {
             lector.close();
             if (contenido.length() == 0) {
                 contenido.append("No hay productos registrados.");
-
             }
             JOptionPane.showMessageDialog(
                     null,
@@ -183,7 +175,7 @@ public class Producto {
 
     }
 
-    public static void Stock() {
+    public static void stock() {
 
         String codigoBuscar = JOptionPane.showInputDialog("Ingrese código del producto:");
         try {
@@ -210,24 +202,40 @@ public class Producto {
                 }
             }
             lector.close();
-
             if (!encontrado) {
                 JOptionPane.showMessageDialog(
                         null,
                         "Producto no encontrado."
                 );
-
             }
-
         } catch (IOException e) {
             JOptionPane.showMessageDialog(
                     null,
                     "Error al leer archivo: "
                             + e.getMessage()
             );
-
         }
+    }
 
+    public static boolean existeProducto(String codigoBuscar) {
+
+        try {
+
+            BufferedReader lector = new BufferedReader(new FileReader("src/Archivos/inventario.txt"));
+            String linea;
+            while ((linea = lector.readLine()) != null) {
+                String[] datos = linea.split(",");
+                if (datos[0].equalsIgnoreCase(codigoBuscar)) {
+                    lector.close();
+                    return true;
+                }
+            }
+            lector.close();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null,
+                    "Error: " + e.getMessage());
+        }
+        return false;
     }
 
 }

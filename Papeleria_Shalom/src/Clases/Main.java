@@ -41,7 +41,7 @@ public class Main {
                         "Bienvenido Administrador: "
                                 + jefe.getNombre());
                 acceso = true;
-                jefe.Menu();
+                jefe.menu();
             } else if (usuarioEntrada.equals(empleado.getUsuario())
                     && contrasenaEntrada.equals(empleado.getContrasena())) {
 
@@ -49,7 +49,7 @@ public class Main {
                         "Bienvenido Cajero: "
                                 + empleado.getNombre());
                 acceso = true;
-                empleado.Menu();
+                empleado.menu();
             } else {
 
                 JOptionPane.showMessageDialog(null,

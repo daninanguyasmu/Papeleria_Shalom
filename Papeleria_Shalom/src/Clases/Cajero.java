@@ -9,7 +9,7 @@ public class Cajero extends Usuario {
         super(nombre, usuario, contrasena, 2);
     }
 
-    public void Menu() {
+    public void menu() {
 
         int opcion;
 
@@ -93,7 +93,7 @@ public class Cajero extends Usuario {
 
                 case 2:
 
-                    Producto.Stock();
+                    Producto.stock();
 
                     break;
 

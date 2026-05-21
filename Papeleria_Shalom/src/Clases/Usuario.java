@@ -1,6 +1,6 @@
 package Clases;
 
-public class Usuario {
+public  abstract class Usuario {
 
     private String contrasena;
     private String nombre;
@@ -50,4 +50,6 @@ public class Usuario {
     public void setUsuario(String usuario) {
         this.usuario = usuario;
     }
+
+    public abstract void menu();
 }
