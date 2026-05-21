@@ -13,7 +13,7 @@ public class Inventario {
 
     static String nuevaLineaProd;
 
-    public static void actualizarStock(String cod, int cant, boolean b){
+    public static void actualizarStock(String cod, int cant, boolean esVenta){
         try(BufferedReader br = new BufferedReader(new FileReader(ruta));
         BufferedWriter bw = new BufferedWriter(new FileWriter(temp))){
             String linea;
@@ -22,7 +22,7 @@ public class Inventario {
 
                 if (cod.equals(prod[0])){
                     int stockActual = Integer.parseInt(prod[4]);
-                    if (b){
+                    if (esVenta){
                         prod[4] = String.valueOf(stockActual-cant);
                         IO.println(Arrays.toString(prod));
                     } else{

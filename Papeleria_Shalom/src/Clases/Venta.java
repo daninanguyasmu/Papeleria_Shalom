@@ -19,7 +19,6 @@ public class Venta {
 
 
     public Venta(String nv) {
-        this.folio = this.getContadorVentas() + 1;
         this.nombreVendedor = nv;
         this.fecha = LocalDateTime.now();
         this.total = 0;
@@ -108,6 +107,7 @@ public class Venta {
 
     public void guardarVenta() {
         this.total = 0;
+        this.folio = getContadorVentas() + 1;
         String productosTexto = "";
         for (int i = 0; i < productos.size(); i++) {
             String prod = productos.get(i);

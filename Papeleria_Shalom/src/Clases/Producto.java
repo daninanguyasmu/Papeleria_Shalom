@@ -4,12 +4,9 @@ package Clases;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.*;
 import javax.swing.JOptionPane;
-import java.io.BufferedReader;
-import java.io.FileReader;
 
 public class Producto {
     private String codigo;
@@ -18,6 +15,8 @@ public class Producto {
     private double precioVenta;
     private int stock;
     private String tipo;
+    final private static String ruta = "src/Archivos/inventario.txt";
+    final private static String temp = "src/Archivos/temp_inventario.txt";
 
     public Producto(String codigo, String nombre, double precioCompra, double precioVenta, int stock, String tipo) {
         this.codigo = codigo;
@@ -38,7 +37,7 @@ public class Producto {
     public void guardarEnTxt()
     {
 
-        try (FileWriter archivo = new FileWriter("src/Archivos/inventario.txt", true);
+        try (FileWriter archivo = new FileWriter(ruta, true);
              PrintWriter escritor = new PrintWriter(archivo)) {
             
             // Guardamos los datos separados por comas
@@ -134,7 +133,7 @@ public class Producto {
 
         try {
 
-            BufferedReader lector = new BufferedReader(new FileReader("src/Archivos/inventario.txt"));
+            BufferedReader lector = new BufferedReader(new FileReader(ruta));
             String linea;
             StringBuilder contenido = new StringBuilder();
             while ((linea = lector.readLine()) != null) {
@@ -143,18 +142,18 @@ public class Producto {
                     contenido.append(
                             "══════════════════════\n"
                     );
-                    contenido.append("Código: " + datos[0] + "\n");
-                    contenido.append("Nombre: " + datos[1] + "\n");
-                    contenido.append("Precio Compra: $" + datos[2] + "\n");
-                    contenido.append("Precio Venta: $" + datos[3] + "\n");
-                    contenido.append("Stock: " + datos[4] + "\n");
-                    contenido.append("Tipo: " + datos[5] + "\n\n");
+                    contenido.append("Código: ").append(datos[0]).append("\n");
+                    contenido.append("Nombre: ").append(datos[1]).append("\n");
+                    contenido.append("Precio Compra: $").append(datos[2]).append("\n");
+                    contenido.append("Precio Venta: $").append(datos[3]).append("\n");
+                    contenido.append("Stock: ").append(datos[4]).append("\n");
+                    contenido.append("Tipo: ").append(datos[5]).append("\n\n");
                 }
 
             }
 
             lector.close();
-            if (contenido.length() == 0) {
+            if (contenido.isEmpty()) {
                 contenido.append("No hay productos registrados.");
             }
             JOptionPane.showMessageDialog(
@@ -180,7 +179,7 @@ public class Producto {
         String codigoBuscar = JOptionPane.showInputDialog("Ingrese código del producto:");
         try {
 
-            BufferedReader lector = new BufferedReader(new FileReader("src/Archivos/inventario.txt"));
+            BufferedReader lector = new BufferedReader(new FileReader(ruta));
             String linea;
             boolean encontrado = false;
             while ((linea = lector.readLine()) != null) {
@@ -191,8 +190,8 @@ public class Producto {
                             null,
                             """
                             ═════ PRODUCTO ═════
-                            
-                            Código: """ + datos[0] +
+                           \s
+                            Código:\s""" + datos[0] +
                                     "\nNombre: " + datos[1] +
                                     "\nStock: " + datos[4] +
                                     "\nPrecio Venta: $" + datos[3]
@@ -236,6 +235,52 @@ public class Producto {
                     "Error: " + e.getMessage());
         }
         return false;
+    }
+
+    public static void actualizarPrecio(String tipo){
+        String cod = JOptionPane.showInputDialog(null, "Introduce el código del producto", "Cambiar Precio Compra", JOptionPane.WARNING_MESSAGE);
+        String linea;
+        double p = Double.parseDouble(JOptionPane.showInputDialog(null, "Introduce el nuevo precio", "Cambiar Precio Compra", JOptionPane.WARNING_MESSAGE));
+        boolean fndProd = false;
+
+        try(BufferedReader br = new BufferedReader(new FileReader(ruta));
+        BufferedWriter bw = new BufferedWriter(new FileWriter(temp))){
+            while((linea = br.readLine()) != null){
+                String[] prod = linea.split(",");
+                if (cod.equals(prod[0])){
+                    switch (tipo){
+                        case "c":
+                            prod[2] = String.valueOf(p);
+                            fndProd = true;
+                            break;
+                        case "v":
+                            prod[3] = String.valueOf(p);
+                            fndProd = true;
+                            break;
+                        default:
+                            JOptionPane.showMessageDialog(null, "OPERACION NO RECONOCIDA");
+                    }
+                }
+                linea = String.join(",", prod);
+                bw.write(linea);
+                bw.newLine();
+            }
+
+            if (!fndProd){
+                JOptionPane.showMessageDialog(null, "Producto no Encontrado", "Error", JOptionPane.WARNING_MESSAGE);
+            }
+
+        }catch (IOException e){
+            IO.println(e);
+        }
+        try{
+            Path archivoOriginal = Paths.get(ruta);
+            Path archivoTemp = Paths.get(temp);
+
+            Files.move(archivoTemp, archivoOriginal, StandardCopyOption.REPLACE_EXISTING);
+        }catch (IOException e){
+            IO.println(e);
+        }
     }
 
 }
