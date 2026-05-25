@@ -91,7 +91,7 @@ public class Venta {
                 if (codigoBuscar.equals(codigoProd[0])) {
                     fndProd = true;
                     index = i;
-                    cantProd = Integer.parseInt(codigoProd[3]);
+                    cantProd = Integer.parseInt(codigoProd[4]);
                     break;
                 }
             }
@@ -106,27 +106,34 @@ public class Venta {
 
 
     public void guardarVenta() {
+        double gananciaReal = 0;
         this.total = 0;
         this.folio = getContadorVentas() + 1;
         String productosTexto = "";
         for (int i = 0; i < productos.size(); i++) {
             String prod = productos.get(i);
             String[] spltProd = prod.split("\\|");
-            productosTexto += spltProd[1] + " x" + spltProd[3];
+            productosTexto += spltProd[1] + " x" + spltProd[4];
             if (i < productos.size() - 1) {
                 productosTexto += " - ";
             }
-            this.total += Double.parseDouble(spltProd[4]);
+            double precioCompra = Double.parseDouble(spltProd[2]);
+            double precioVenta = Double.parseDouble(spltProd[3]);
+            int cantidad = Integer.parseInt(spltProd[4]);
+            double totalProducto = Double.parseDouble(spltProd[5]);
+            this.total += totalProducto;
+            gananciaReal += (precioVenta - precioCompra) * cantidad;
         }
 
         try (FileWriter fw = new FileWriter("src/Archivos/ventas.txt", true);
              PrintWriter pw = new PrintWriter(fw)) {
             pw.println(
-                            this.folio + "," +
+                    this.folio + "," +
                             this.fecha + "," +
                             this.nombreVendedor + "," +
                             productosTexto + "," +
-                            this.total
+                            this.total + "," +
+                            gananciaReal
             );
 
             JOptionPane.showMessageDialog(null,
@@ -175,7 +182,7 @@ public class Venta {
                 if (prod[0].equals(id)) {
                     if (Integer.parseInt(prod[4]) > 0 && Integer.parseInt(prod[4]) >= cant) {
                         String fndProducto = pr;
-                        return prod[0] + "|" + prod[1] + "|" + prod[3] + "|" + cant + "|" + cant * Double.parseDouble(prod[3]);
+                        return prod[0] + "|" + prod[1] + "|" + prod[2] + "|" + prod[3] + "|" + cant + "|" + cant * Double.parseDouble(prod[3]);
                     }
                 }
             }
@@ -187,15 +194,13 @@ public class Venta {
     }
 
     private String buscarProducto(String id) {
+
         try(FileReader fr = new FileReader(rutaProductos);
-             BufferedReader br = new BufferedReader(fr)){
-
+            BufferedReader br = new BufferedReader(fr)){
             String pr;
-
             while ((pr = br.readLine()) != null) {
                 String[] prod = pr.split(",");
                 if (prod[0].equals(id)) {
-                    String fndProducto = pr;
                     return prod[0] + "|" + prod[1] + "|" + prod[3] + "|" + prod[4] + "|";
                 }
             }
@@ -247,25 +252,15 @@ public class Venta {
 
             if (contenido.isEmpty()) {
 
-                contenido.append(
-                        "No hay ventas registradas."
-                );
+                contenido.append("No hay ventas registradas.");
 
             }
 
-            JOptionPane.showMessageDialog(
-                    null,
-                    contenido.toString(),
-                    "HISTORIAL DE VENTAS",
-                    JOptionPane.INFORMATION_MESSAGE
+            JOptionPane.showMessageDialog(null, contenido.toString(), "HISTORIAL DE VENTAS", JOptionPane.INFORMATION_MESSAGE
             );
 
         } catch (IOException e) {
-
-            JOptionPane.showMessageDialog(
-                    null,
-                    "Error al leer historial: "
-                            + e.getMessage()
+            JOptionPane.showMessageDialog(null, "Error al leer historial: " + e.getMessage()
             );
 
         }
@@ -282,7 +277,7 @@ public class Venta {
     }
 
     public static void reporteFinanciero() {
-
+        double gananciaReal = 0;
         double totalVendido = 0;
         int cantidadVentas = 0;
         double ventaMayor = 0;
@@ -302,6 +297,8 @@ public class Venta {
 
                 if (datos.length >= 5) {
                     double totalVenta = Double.parseDouble(datos[4]);
+                    double gananciaVenta = Double.parseDouble(datos[5]);
+                    gananciaReal += gananciaVenta;
                     totalVendido += totalVenta;
                     cantidadVentas++;
                     if (totalVenta > ventaMayor) {
@@ -334,7 +331,7 @@ public class Venta {
                             "\nTotal vendido: $" + totalVendido +
                             "\nPromedio por venta: $" + promedio +
                             "\nVenta mayor: $" + ventaMayor +
-                            "\nVenta menor: $" + ventaMenor,
+                            "\nGanancia real: $" + gananciaReal,
                     "FINANZAS",
                     JOptionPane.INFORMATION_MESSAGE
             );

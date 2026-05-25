@@ -85,7 +85,10 @@ public class Administrador extends Usuario {
                             
                             1. Registrar Producto
                             2. Ver productos
-                            3. Volver
+                            3. Actualizar Precio De Compra (producto)
+                            4. Actualizar Precio De Venta (producto)
+                            5. Agregar Stock
+                            6. Volver
                             
                             Seleccione una opción:
                             """
@@ -108,6 +111,24 @@ public class Administrador extends Usuario {
 
                 case 3:
 
+                    Producto.actualizarPrecio("c");
+
+                    break;
+
+                case 4:
+
+                    Producto.actualizarPrecio("v");
+
+                    break;
+
+                case 5:
+
+                    Producto.agregarStock();
+
+                    break;
+
+                case 6:
+
                     JOptionPane.showMessageDialog(null,
                             "Regresando...");
 
@@ -120,7 +141,7 @@ public class Administrador extends Usuario {
 
             }
 
-        } while (opcion != 3);
+        } while (opcion !=6);
 
     }
 

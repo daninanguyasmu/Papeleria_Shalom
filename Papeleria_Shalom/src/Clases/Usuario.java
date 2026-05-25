@@ -39,9 +39,7 @@ public  abstract class Usuario {
         return nombre;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+    public void setNombre(String nombre) {this.nombre = nombre;}
 
     public String getUsuario() {
         return usuario;

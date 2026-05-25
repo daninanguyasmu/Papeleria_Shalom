@@ -20,33 +20,28 @@ public class Main {
         boolean acceso = false;
 
         while (!acceso) {
-            String usuarioEntrada = JOptionPane.showInputDialog(
-                    "Ingrese su usuario:");
+            String usuarioEntrada = JOptionPane.showInputDialog("Ingrese su usuario:");
 
-            String contrasenaEntrada = JOptionPane.showInputDialog(
-                    "Ingrese su contraseña:");
+            String contrasenaEntrada = JOptionPane.showInputDialog("Ingrese su contraseña:");
 
             if (usuarioEntrada == null || contrasenaEntrada == null) {
 
-                JOptionPane.showMessageDialog(null,
-                        "Sesión cancelada.");
+                JOptionPane.showMessageDialog(null, "Sesión cancelada.");
 
                 return;
             }
 
-            if (usuarioEntrada.equals(jefe.getUsuario())
-                    && contrasenaEntrada.equals(jefe.getContrasena())) {
+            if (usuarioEntrada.equals(jefe.getUsuario()) && contrasenaEntrada.equals(jefe.getContrasena())) {
 
-                JOptionPane.showMessageDialog(null,
-                        "Bienvenido Administrador: "
-                                + jefe.getNombre());
+                JOptionPane.showMessageDialog(null, "Bienvenido Administrador: " + jefe.getNombre());
+
                 acceso = true;
-                jefe.menu();
-            } else if (usuarioEntrada.equals(empleado.getUsuario())
-                    && contrasenaEntrada.equals(empleado.getContrasena())) {
 
-                JOptionPane.showMessageDialog(null,
-                        "Bienvenido Cajero: "
+                jefe.menu();
+
+            } else if (usuarioEntrada.equals(empleado.getUsuario()) && contrasenaEntrada.equals(empleado.getContrasena())) {
+
+                JOptionPane.showMessageDialog(null, "Bienvenido Cajero: "
                                 + empleado.getNombre());
                 acceso = true;
                 empleado.menu();
