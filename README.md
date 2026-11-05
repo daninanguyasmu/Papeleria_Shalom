@@ -44,5 +44,9 @@ This project can be run in any IDE with Java support (IntelliJ IDEA, Eclipse, Ap
     *   **Cashier:** User: `cajero` | Password: `cajera29`
 
 ## 👨‍💻 Author
-**Daniel Horacio Nanguyasmú Mejía**  
-Computer Systems Engineering Student @ TecNM Campus Tuxtla Gutiérrez
+* **Daniel Horacio Nanguyasmú Mejía**  - *Core Developer* - [GitHub](https://github.com/daninanguyasmu)
+* **Vanessa Stephania Roblero Rodríguez** - *Core Developer* - [GitHub](https://github.com/roblerovane29-a11y)
+* **Emanuel Vázquez Roblero** - *Core Developer* - [GitHub](https://github.com/Ing-Vazquez20)
+* **Jorge López Silva** - *Core Developer* - [GitHub](https://github.com/jorlopsil1404-debug)
+* **Bryan Alexander Guillén Guillén** - *Core Developer* - [GitHub](https://github.com/alexguillen1512-beep)
+Computer Systems Engineering Students @ TecNM Campus Tuxtla Gutiérrez
